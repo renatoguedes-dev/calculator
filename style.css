@@ -1,0 +1,110 @@
+@font-face {
+  font-family: 'digital-7regular';
+  src: url('./display-font/digital7-1e1z-webfont.woff2') format('woff2'),
+       url('./display-font/digital7-1e1z-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova&family=Metal+Mania&family=Playfair+Display:ital@1&display=swap');
+
+html {
+  height: 100%;
+  display: flex;
+  text-align: center;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+body {
+ background-color: rgba(153, 153, 153, 0.219);
+}
+
+div#calculator-body {
+  display: grid;
+  grid-template-columns: repeat(4, 98px);
+  grid-template-rows: minmax(100px, auto);
+  grid-template-areas: 
+    "d d d d"
+    "d d d d"
+    "clear del del division"
+    "seven eight nine multi"
+    "four five six minus"
+    "one two three plus"
+    "zer zer period equals";
+  gap: 10px;
+  background-color: #777;
+  padding: 20px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+}
+
+.display {grid-area: d;}
+.clear-btn {grid-area: clear;}
+.del-btn {grid-area: del;}
+.div-btn {grid-area: division;}
+.seven-btn {grid-area: seven;}
+.eight-btn {grid-area: eight;}
+.nine-btn {grid-area: nine;}
+.multiply-btn {grid-area: multi;}
+.four-btn {grid-area: four;}
+.five-btn {grid-area: five;}
+.six-btn {grid-area: six;}
+.minus-btn {grid-area: minus;}
+.one-btn {grid-area: one;}
+.two-btn {grid-area: two;}
+.three-btn {grid-area: three;}
+.plus-btn {grid-area: plus;}
+.zero-btn {grid-area: zer;}
+.period-btn {grid-area: period;}
+.equals-btn {grid-area: equals;}
+
+.display,
+.btn {
+  padding: 20px;
+  font-size: 25px;
+  font-weight: 400;
+  border-radius: 5px;
+  border: 2px solid black;
+  color: white;
+}
+
+.btn, .oper-btns {
+  font-family: 'Ibarra Real Nova', serif;
+}
+
+.display {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  font-family: 'digital-7regular';
+  font-size: 50px;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.774);
+}
+
+.display .display-history {
+  font-size: 30px;
+  margin-bottom: 15px;
+
+}
+
+.oper-btns {
+  background-color: rgba(255, 166, 0, 0.897);
+  font-weight: 500;
+}
+
+.number-btns {
+  background-color: rgba(61, 139, 255, 0.603);
+}
+
+.clear-btn {
+  background-color: rgb(255, 67, 67);
+}
+
+.del-btn {
+  background-color: rgb(0, 173, 0);
+}
