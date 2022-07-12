@@ -119,6 +119,7 @@ function operationPressed(e) {
   // and pressed again
   } else if (operationExecuted == '÷' && equalsPressed == '') {
     operate();
+    if (!isFinite(result)) return;
     operationExecuted = e.target.innerHTML;
     displayHistory.innerHTML = `${result} ${operationExecuted}`;
     noCommaFirstNumbers = result;
@@ -135,6 +136,14 @@ function operationPressed(e) {
 
 // function executed with the equals button only
 function equalsTo(e) {
+  if (noCommaSecondNumbers == '') {
+    equalsPressed = e.target.innerHTML;
+    operate()
+    displayHistory.innerHTML = `${a} ${equalsPressed}`;
+    noCommaFirstNumbers = result;
+    firstStoredNumbers = [];
+    return;
+  }
   equalsPressed = e.target.innerHTML;
   operate()
   displayHistory.innerHTML = `${a} ${operationExecuted} ${b} ${equalsPressed}`;
@@ -172,6 +181,12 @@ function operate() {
   } else if (operationExecuted == "÷") {
     let resultFloat = division(a, b);
     result = parseFloat(resultFloat.toFixed(6));
+    if (!isFinite(result)) {
+      displayHistory.innerHTML = `${a} ${operationExecuted} ${b} ${operationExecuted}`;
+      displayCurrent.innerHTML = `ERROR`;
+      alert("You can't divide by 0!")
+      return;
+    }
     displayHistory.innerHTML = `${a} ${operationExecuted} ${b} ${operationExecuted}`;
     displayCurrent.innerHTML = `${result}`;
     return result;  
