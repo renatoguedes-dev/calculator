@@ -52,7 +52,8 @@ function storeNumber(e) {
 
   // this is used if the user starts typing new numbers after the equals button
   // was pressed. It restarts everything just like the clear button
-  } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' && equalsPressed === '=') {
+  } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' 
+    && equalsPressed === '=' || displayCurrent.innerHTML == "ERROR") {
     clearAllData();
     firstStoredNumbers.push(pressedNumber);
     noCommaFirstNumbers = firstStoredNumbers.join('')
