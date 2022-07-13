@@ -109,6 +109,10 @@ div#calculator-body {
   font-family: 'Ibarra Real Nova', serif;
 }
 
+.btn:hover {
+  background-color: rgba(240, 240, 240, 0.603);
+}
+
 .display {
   display: flex;
   align-items: flex-end;

@@ -42,47 +42,41 @@ function numberPressed(e) {
 }
 
 function storeNumber(e) {
-  
-  let pressedKey = document.querySelector(`button[data-key="${e.key}"]`)
-  if (pressedKey == null) {
-    pressedNumber = numberPressed(e); 
-  } else {
-    pressedNumber = pressedKey.innerHTML;
-  }
-    // this runs as the first input from the user except if it's a dot
-    if (noCommaSecondNumbers === '' && pressedNumber != '.') {
-      firstStoredNumbers.push(pressedNumber);
-      noCommaFirstNumbers = firstStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaFirstNumbers;
-      return noCommaFirstNumbers;     
+  let pressedNumber = numberPressed(e);
+  // this runs as the first input from the user except if it's a dot
+  if (noCommaSecondNumbers === '' && pressedNumber != '.') {
+    firstStoredNumbers.push(pressedNumber);
+    noCommaFirstNumbers = firstStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaFirstNumbers;
+    return noCommaFirstNumbers;     
 
-    // this is used if the user starts typing new numbers after the equals button
-    // was pressed. It restarts everything just like the clear button
-    } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' 
-      && equalsPressed === '=' || displayCurrent.innerHTML == "ERROR") {
-      clearAllData();
-      firstStoredNumbers.push(pressedNumber);
-      noCommaFirstNumbers = firstStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaFirstNumbers;
-      return noCommaFirstNumbers;   
-    
-    // this runs if the user clicks the dot before any other number otherwise it
-    // breaks the number and allow multiple dots
-    } else if (pressedNumber == '.' && 
-      (noCommaSecondNumbers === 0 || noCommaSecondNumbers === '')) {
-      secondStoredNumbers.push(0, pressedNumber);
-      noCommaSecondNumbers = secondStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaSecondNumbers;
-      return noCommaSecondNumbers; 
-    
-    // this runs if the user has already input a first set of numbers and pressed
-    // any operation button
-    } else {
-      secondStoredNumbers.push(pressedNumber);
-      noCommaSecondNumbers = secondStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaSecondNumbers;
-      return noCommaSecondNumbers; 
-    }
+  // this is used if the user starts typing new numbers after the equals button
+  // was pressed. It restarts everything just like the clear button
+  } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' 
+    && equalsPressed === '=' || displayCurrent.innerHTML == "ERROR") {
+    clearAllData();
+    firstStoredNumbers.push(pressedNumber);
+    noCommaFirstNumbers = firstStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaFirstNumbers;
+    return noCommaFirstNumbers;   
+  
+  // this runs if the user clicks the dot before any other number otherwise it
+  // breaks the number and allow multiple dots
+  } else if (pressedNumber == '.' && 
+    (noCommaSecondNumbers === 0 || noCommaSecondNumbers === '')) {
+    secondStoredNumbers.push(0, pressedNumber);
+    noCommaSecondNumbers = secondStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaSecondNumbers;
+    return noCommaSecondNumbers; 
+  
+  // this runs if the user has already input a first set of numbers and pressed
+  // any operation button
+  } else {
+    secondStoredNumbers.push(pressedNumber);
+    noCommaSecondNumbers = secondStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaSecondNumbers;
+    return noCommaSecondNumbers; 
+  }
 }
 
 function operationPressed(e) {
@@ -250,18 +244,107 @@ function isInt(n) {
   return n % 1 === 0;
 }
 
-window.addEventListener('keydown', keyPressed)
+window.addEventListener('keydown', storeNumberFromKeyboard)
 
 function keyPressed(e) {
-  if (pressedNumber <= 9 && pressedNumber >= 0){
-    storeNumber(e);
-  } else if (pressedNumber == '-' || pressedNumber == '+' || pressedNumber == '/' ||
-  pressedNumber == '*') {
-    operationPressed(e);
-  }
+  let pressedKey = document.querySelector(`button[data-key="${e.key}"]`).innerHTML
+  console.log(pressedKey); 
+  return pressedKey
 }
 
 function storeNumberFromKeyboard(e) {
+  let pressedKey = document.querySelector(`button[data-key="${e.key}"]`)
+  let pressedNumber = pressedKey.innerHTML
+  if (pressedNumber <= 9 && pressedNumber >= 0) {
+    if (noCommaSecondNumbers === '' && pressedNumber != '.') {
+      firstStoredNumbers.push(pressedNumber);
+      noCommaFirstNumbers = firstStoredNumbers.join('')
+      displayCurrent.innerHTML = noCommaFirstNumbers;
+      return noCommaFirstNumbers;     
   
+    // this is used if the user starts typing new numbers after the equals button
+    // was pressed. It restarts everything just like the clear button
+    } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' 
+      && equalsPressed === '=' || displayCurrent.innerHTML == "ERROR") {
+      clearAllData();
+      firstStoredNumbers.push(pressedNumber);
+      noCommaFirstNumbers = firstStoredNumbers.join('')
+      displayCurrent.innerHTML = noCommaFirstNumbers;
+      return noCommaFirstNumbers;   
+    
+    // this runs if the user clicks the dot before any other number otherwise it
+    // breaks the number and allow multiple dots
+    } else if (pressedNumber == '.' && 
+      (noCommaSecondNumbers === 0 || noCommaSecondNumbers === '')) {
+      secondStoredNumbers.push(0, pressedNumber);
+      noCommaSecondNumbers = secondStoredNumbers.join('')
+      displayCurrent.innerHTML = noCommaSecondNumbers;
+      return noCommaSecondNumbers; 
+    
+    // this runs if the user has already input a first set of numbers and pressed
+    // any operation button
+    } else {
+      secondStoredNumbers.push(pressedNumber);
+      noCommaSecondNumbers = secondStoredNumbers.join('')
+      displayCurrent.innerHTML = noCommaSecondNumbers;
+      return noCommaSecondNumbers; 
+    }
+  } else if (pressedNumber == '-' || pressedNumber == '+' || pressedNumber == '/' ||
+    pressedNumber == '*') {
+  // this will be triggered first time any operation is pressed
+  if (operationExecuted == '' && result == 0) {
+    operationExecuted = e.target.innerHTML;
+    displayHistory.innerHTML = `${noCommaFirstNumbers} ${operationExecuted}`;
+    noCommaSecondNumbers = 0;
+    return operationExecuted;
+  }
+
+  // this will be triggered if a add operation was executed previously and 
+  // pressed again
+  if (operationExecuted == '+' && equalsPressed == '') {
+    operate();
+    operationExecuted = e.target.innerHTML;
+    displayHistory.innerHTML = `${result} ${operationExecuted}`;
+    noCommaFirstNumbers = result;
+    secondStoredNumbers = [];
+  
+  // this will be triggered if a subtraction operation was executed previously 
+  // and pressed again
+  } else if (operationExecuted == '-' && equalsPressed == '') {
+    operate();
+    operationExecuted = e.target.innerHTML;
+    displayHistory.innerHTML = `${result} ${operationExecuted}`;
+    noCommaFirstNumbers = result;
+    secondStoredNumbers = [];
+
+  // this will be triggered if a multiplication operation was executed previously 
+  // and pressed again
+  } else if (operationExecuted == 'x' && equalsPressed == '') {
+    operate();
+    operationExecuted = e.target.innerHTML;
+    displayHistory.innerHTML = `${result} ${operationExecuted}`;
+    noCommaFirstNumbers = result;
+    secondStoredNumbers = [];
+  
+  // this will be triggered if a division operation was executed previously 
+  // and pressed again
+  } else if (operationExecuted == '÷' && equalsPressed == '') {
+    operate();
+    if (!isFinite(result)) return;
+    operationExecuted = e.target.innerHTML;
+    displayHistory.innerHTML = `${result} ${operationExecuted}`;
+    noCommaFirstNumbers = result;
+    secondStoredNumbers = [];
+  
+  } else if (equalsPressed == '=') {
+    operationExecuted = e.target.innerHTML;
+    displayHistory.innerHTML = `${result} ${operationExecuted}`;
+    noCommaFirstNumbers = result;
+    secondStoredNumbers = [];
+    equalsPressed = '';
+  }
+
+  }
+
   
 }
