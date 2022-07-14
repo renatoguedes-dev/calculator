@@ -8,6 +8,9 @@ let result = 0;
 let a;
 let b;
 let equalsPressed = '';
+let pressedNumber;
+let numberRegistered;
+let pressedKey;
 
 // operations const to be used on the operate function
 const division = (a, b) => a / b;
@@ -32,64 +35,75 @@ clearBtn.addEventListener('click', clearAllData);
 periodBtn.addEventListener('click', disableIf);
 equalsBtn.addEventListener('click', equalsTo);
 delBtn.addEventListener('click', deleteLast);
+window.addEventListener('keydown', keyPressed);
 
 
 // starting all the functions used on the code. Only functions below this part
 
 function numberPressed(e) {
-  let numberRegistered = e.target.innerHTML;
+  if (pressedKey == null && escEnterPressed != 'Enter') {
+    numberRegistered = e.target.innerHTML;
+  } else if (pressedKey != null) {
+    numberRegistered = pressedKey;
+  } else if (pressedKey == null && escEnterPressed == 'Enter') {
+    numberRegistered = '='
+  }
   return numberRegistered;
 }
 
 function storeNumber(e) {
+  pressedNumber = numberPressed(e);
   
-  let pressedKey = document.querySelector(`button[data-key="${e.key}"]`)
-  if (pressedKey == null) {
-    pressedNumber = numberPressed(e); 
-  } else {
-    pressedNumber = pressedKey.innerHTML;
-  }
-    // this runs as the first input from the user except if it's a dot
-    if (noCommaSecondNumbers === '' && pressedNumber != '.') {
-      firstStoredNumbers.push(pressedNumber);
-      noCommaFirstNumbers = firstStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaFirstNumbers;
-      return noCommaFirstNumbers;     
+  if (pressedNumber == '.' && noCommaFirstNumbers == '' && noCommaSecondNumbers == '') {
+    firstStoredNumbers.push(0, pressedNumber);
+    noCommaFirstNumbers = firstStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaFirstNumbers;
 
-    // this is used if the user starts typing new numbers after the equals button
-    // was pressed. It restarts everything just like the clear button
-    } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' 
-      && equalsPressed === '=' || displayCurrent.innerHTML == "ERROR") {
-      clearAllData();
-      firstStoredNumbers.push(pressedNumber);
-      noCommaFirstNumbers = firstStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaFirstNumbers;
-      return noCommaFirstNumbers;   
+  // this runs if the user clicks the dot before any other number otherwise it
+  // breaks the number and allow multiple dots.
+  // this will also run if the user inputs dot as first character after an operation
+  } else if ((pressedNumber == '.' && noCommaFirstNumbers != '' 
+  && noCommaSecondNumbers == '' && equalsPressed == '=') || (pressedNumber == '.' && 
+  (noCommaSecondNumbers === 0 || noCommaSecondNumbers === '') &&
+  operationExecuted != '')) {
     
-    // this runs if the user clicks the dot before any other number otherwise it
-    // breaks the number and allow multiple dots
-    } else if (pressedNumber == '.' && 
-      (noCommaSecondNumbers === 0 || noCommaSecondNumbers === '')) {
-      secondStoredNumbers.push(0, pressedNumber);
-      noCommaSecondNumbers = secondStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaSecondNumbers;
-      return noCommaSecondNumbers; 
+    secondStoredNumbers.push(0, pressedNumber);
+    noCommaSecondNumbers = secondStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaSecondNumbers;
+    return noCommaSecondNumbers; 
     
-    // this runs if the user has already input a first set of numbers and pressed
-    // any operation button
-    } else {
-      secondStoredNumbers.push(pressedNumber);
-      noCommaSecondNumbers = secondStoredNumbers.join('')
-      displayCurrent.innerHTML = noCommaSecondNumbers;
-      return noCommaSecondNumbers; 
-    }
+  // this runs as the first input from the user except if it's a dot
+  } else if (noCommaSecondNumbers === '') {
+    firstStoredNumbers.push(pressedNumber);
+    noCommaFirstNumbers = firstStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaFirstNumbers;
+    return noCommaFirstNumbers;     
+
+  // this is used if the user starts typing new numbers after the equals button
+  // was pressed. It restarts everything just like the clear button
+  } else if (noCommaSecondNumbers !== 0 && noCommaSecondNumbers !== '' 
+    && equalsPressed === '=' || displayCurrent.innerHTML == "ERROR") {
+    clearAllData();
+    firstStoredNumbers.push(pressedNumber);
+    noCommaFirstNumbers = firstStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaFirstNumbers;
+    return noCommaFirstNumbers;   
+  
+  // this runs if the user has already input a first set of numbers and pressed
+  // any operation button
+  } else {
+    secondStoredNumbers.push(pressedNumber);
+    noCommaSecondNumbers = secondStoredNumbers.join('')
+    displayCurrent.innerHTML = noCommaSecondNumbers;
+    return noCommaSecondNumbers; 
+  }
 }
 
 function operationPressed(e) {
 
   // this will be triggered first time any operation is pressed
   if (operationExecuted == '' && result == 0) {
-    operationExecuted = e.target.innerHTML;
+    operationExecuted = numberPressed(e);
     displayHistory.innerHTML = `${noCommaFirstNumbers} ${operationExecuted}`;
     noCommaSecondNumbers = 0;
     return operationExecuted;
@@ -99,7 +113,7 @@ function operationPressed(e) {
   // pressed again
   if (operationExecuted == '+' && equalsPressed == '') {
     operate();
-    operationExecuted = e.target.innerHTML;
+    operationExecuted = numberPressed(e);
     displayHistory.innerHTML = `${result} ${operationExecuted}`;
     noCommaFirstNumbers = result;
     secondStoredNumbers = [];
@@ -108,7 +122,7 @@ function operationPressed(e) {
   // and pressed again
   } else if (operationExecuted == '-' && equalsPressed == '') {
     operate();
-    operationExecuted = e.target.innerHTML;
+    operationExecuted = numberPressed(e);
     displayHistory.innerHTML = `${result} ${operationExecuted}`;
     noCommaFirstNumbers = result;
     secondStoredNumbers = [];
@@ -117,7 +131,7 @@ function operationPressed(e) {
   // and pressed again
   } else if (operationExecuted == 'x' && equalsPressed == '') {
     operate();
-    operationExecuted = e.target.innerHTML;
+    operationExecuted = numberPressed(e);
     displayHistory.innerHTML = `${result} ${operationExecuted}`;
     noCommaFirstNumbers = result;
     secondStoredNumbers = [];
@@ -127,13 +141,13 @@ function operationPressed(e) {
   } else if (operationExecuted == '÷' && equalsPressed == '') {
     operate();
     if (!isFinite(result)) return;
-    operationExecuted = e.target.innerHTML;
+    operationExecuted = numberPressed(e);
     displayHistory.innerHTML = `${result} ${operationExecuted}`;
     noCommaFirstNumbers = result;
     secondStoredNumbers = [];
   
   } else if (equalsPressed == '=') {
-    operationExecuted = e.target.innerHTML;
+    operationExecuted = numberPressed(e);
     displayHistory.innerHTML = `${result} ${operationExecuted}`;
     noCommaFirstNumbers = result;
     secondStoredNumbers = [];
@@ -143,15 +157,16 @@ function operationPressed(e) {
 
 // function executed with the equals button only
 function equalsTo(e) {
+  periodBtn.disabled = false
   if (noCommaSecondNumbers == '') {
-    equalsPressed = e.target.innerHTML;
+    equalsPressed = numberPressed(e);
     operate()
     displayHistory.innerHTML = `${a} ${equalsPressed}`;
     noCommaFirstNumbers = result;
     firstStoredNumbers = [];
     return;
   }
-  equalsPressed = e.target.innerHTML;
+  equalsPressed = numberPressed(e);
   operate()
   displayHistory.innerHTML = `${a} ${operationExecuted} ${b} ${equalsPressed}`;
   noCommaFirstNumbers = result;
@@ -213,6 +228,7 @@ function clearAllData() {
   displayHistory.innerHTML = '';
   displayCurrent.innerHTML = 0;
   periodBtn.disabled = false
+  escEnterPressed;
 }
 
 function deleteLast() {
@@ -234,9 +250,11 @@ function deleteLast() {
   }
 }
 
+let periodChecked;
+
 function disableIf() {
   const checkForPeriod = displayCurrent.innerHTML;
-  const periodChecked = isInt(checkForPeriod);
+  periodChecked = containsDot(checkForPeriod);
   
   if (periodChecked) {
     periodBtn.disabled = true;
@@ -246,22 +264,62 @@ function disableIf() {
 }
 
 // check if it's an integer or a float number. If true = integer
-function isInt(n) {
-  return n % 1 === 0;
-}
-
-window.addEventListener('keydown', keyPressed)
-
-function keyPressed(e) {
-  if (pressedNumber <= 9 && pressedNumber >= 0){
-    storeNumber(e);
-  } else if (pressedNumber == '-' || pressedNumber == '+' || pressedNumber == '/' ||
-  pressedNumber == '*') {
-    operationPressed(e);
+function containsDot(n) {
+  if (n.includes('.')) {
+    return true;
+  } else {
+    return false;
   }
 }
 
-function storeNumberFromKeyboard(e) {
+let escEnterPressed;
+
+function keyPressed(e) {
+  pressedKey = document.querySelector(`button[data-key="${e.key}"]`)
   
+  // created this variable for enter and esc keys to avoid refactor all code
+  escEnterPressed = e.key;
   
+
+  if (pressedKey == null && escEnterPressed != 'Enter' && escEnterPressed != 'Escape') {
+    return;
+
+  } else if (pressedKey == null && escEnterPressed == 'Enter' && escEnterPressed != 'Escape') {
+    equalsTo(e);
+
+  } else if (pressedKey == null && escEnterPressed != 'Enter' && escEnterPressed == 'Escape') {
+    clearAllData();
+
+  } else {
+    pressedKey = pressedKey.innerHTML;
+    
+    if (pressedKey <= 9 && pressedKey >= 0){
+      storeNumber(e);
+  
+    } else if (pressedKey == '-' || pressedKey == '+' || pressedKey == '÷' ||
+    pressedKey == 'x') {
+      operationPressed(e);
+  
+    } else if (pressedKey == '=') {
+      equalsTo(e);
+  
+    } else if (pressedKey == 'Backspace') {
+      deleteLast();
+  
+    } else if ((pressedKey == '.' && (noCommaFirstNumbers != '' || noCommaFirstNumbers === 0)
+    && noCommaSecondNumbers == '' && equalsPressed == '=') || (pressedKey == '.' && 
+    (noCommaSecondNumbers === 0 || noCommaSecondNumbers === '') &&
+    operationExecuted != '')) {
+      storeNumber(e);
+  
+    } else if (pressedKey == '.' ) {
+      disableIf();
+      if (periodChecked == true) {
+        return true;
+      } else {
+        storeNumber(e);
+      }
+    }
+    pressedKey = null;
+  }
 }

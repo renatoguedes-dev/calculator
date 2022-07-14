@@ -248,7 +248,6 @@ window.addEventListener('keydown', storeNumberFromKeyboard)
 
 function keyPressed(e) {
   let pressedKey = document.querySelector(`button[data-key="${e.key}"]`).innerHTML
-  console.log(pressedKey); 
   return pressedKey
 }
 
