@@ -124,6 +124,7 @@ div#calculator-body {
   padding-top: 30px;
   color: black;
   background-color: rgba(255, 255, 255, 0.774);
+  overflow: hidden;
 }
 
 .display .display-history {
