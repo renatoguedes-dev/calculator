@@ -1,0 +1,206 @@
+@font-face {
+  font-family: 'digital-7regular';
+  src: url('./display-font/digital7-1e1z-webfont.woff2') format('woff2'),
+       url('./display-font/digital7-1e1z-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova&family=Metal+Mania&family=Playfair+Display:ital@1&display=swap');
+
+*, *::after, *::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+height: 100%;
+width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+main {
+  max-width: 400px;
+  width: 100%;
+  font-size: 25px;
+  align-self: center;
+  margin-top: 4rem;
+}
+
+#calculator-body {
+  display: flex;
+  flex-direction: column;
+  background-color: #777;
+  max-width: 420px;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 1em;
+  min-width: 434px;
+}
+
+.display {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: #E5E7EB;
+  text-align: end;
+  padding: 1.5rem 0.5rem 0.5rem;
+  border-radius: 5px;
+  border: 2px solid black;
+  font-weight: 400;
+  background-color: rgba(255, 255, 255, 0.774);
+  overflow: hidden;
+  font-family: 'digital-7regular';
+  font-size: 50px;
+  height: 100px;
+  width: 100%;
+  min-width: 330px;
+}
+
+.display .display-history {
+  font-size: 30px;
+  margin-bottom: 5px;
+  margin-top: 15px;
+}
+
+.all-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 90px);
+  grid-template-areas: 
+    "d d d d"
+    "d d d d"
+    "clear del del division"
+    "seven eight nine multi"
+    "four five six minus"
+    "one two three plus"
+    "zer zer period equals";
+  gap: 0.5rem;
+}
+
+.display {grid-area: d;}
+.clear-btn {grid-area: clear;}
+.del-btn {grid-area: del;}
+.div-btn {grid-area: division;}
+.seven-btn {grid-area: seven;}
+.eight-btn {grid-area: eight;}
+.nine-btn {grid-area: nine;}
+.multiply-btn {grid-area: multi;}
+.four-btn {grid-area: four;}
+.five-btn {grid-area: five;}
+.six-btn {grid-area: six;}
+.minus-btn {grid-area: minus;}
+.one-btn {grid-area: one;}
+.two-btn {grid-area: two;}
+.three-btn {grid-area: three;}
+.plus-btn {grid-area: plus;}
+.zero-btn {grid-area: zer;}
+.period-btn {grid-area: period;}
+.equals-btn {grid-area: equals;}
+
+.btn {
+  font-size: 25px;
+  border-radius: 5px;
+  border: 2px solid black;
+  padding: 0.7em;
+  color: white;
+}
+
+.btn:hover {
+  background-color: rgba(240, 240, 240, 0.603);
+}
+
+.oper-btns, .equals-btn {
+  min-width: 65px;
+}
+
+.oper-btns,
+.equals-btn {
+  background-color: rgba(255, 166, 0, 0.897);
+  font-weight: 500;
+}
+
+.number-btns {
+  background-color: rgba(61, 139, 255, 0.603);
+}
+
+.period-btn {
+  background-color: rgba(61, 139, 255, 0.603);
+}
+
+.clear-btn {
+  background-color: rgb(255, 67, 67);
+  padding-left: 12px;
+}
+
+.clear-btn::after {
+  content: "Clear";
+}
+
+.del-btn {
+  background-color: rgb(0, 173, 0);
+}
+
+
+.created-by {
+  background-color: #1F2937;
+  color: #E5E7EB;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  font-size: 20px;
+  font-weight: 400;
+  /* margin-top: auto; */
+}
+
+@media screen and (max-width: 380px) {
+  
+  .all-buttons {
+    grid-template-columns: repeat(4, 50px);
+  }
+
+  #calculator-body {
+    max-width: 275px;
+    min-width: 275px;
+    
+  }
+
+  .btn {
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid black;
+    padding: 0.7em;
+    color: white;
+  }
+
+  .clear-btn::after {
+    content: "C";
+  }
+
+  .oper-btns, .equals-btn {
+    min-width: 45px;
+  }
+
+  .display {
+    font-size: 40px;
+    height: 85px;
+    min-width: 200px;
+  }
+
+  .display .display-history {
+    font-size: 20px;
+    margin-bottom: 5px;
+    margin-top: 15px;
+  }
+  
+
+}
